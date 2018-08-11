@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload files</title>
+</head>
+<body>
+
+    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+        <div>Order Id</div>
+        <div><input name="id" type="number" required/></div>
+        <div>
+            <input name="file" type="file" multiple accept="image/*" required/>
+        </div>
+        <div>
+            <input type="submit" value="Upload"/>
+        </div>
+        <br/>
+        <br/>
+        <div><a href="{{ url_for('orders', ordernum='23') }}" download="">download image</a></div>
+    </form>
+</body>
+</html>
