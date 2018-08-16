@@ -15,31 +15,35 @@ def home():
 def upload():
 
     filenames=[]
-    for file in os.listdir(APP_ROOT + '/temp'):
-        os.remove(APP_ROOT +'/temp/' + file)
 
-    with zipfile.ZipFile(APP_ROOT + '/photos/' + request.form['id'] + '.zip', 'w') as myzip:
+    with zipfile.ZipFile(APP_ROOT + '/photos/' + request.form['id'] + '.zip', 'w', zipfile.ZIP_DEFLATED) as myzip:
         for file in request.files.getlist('file'):
+
+            # The path to save
+            temp_full_path = APP_ROOT + '/temp/' + file.filename
+
+            # The filenames to return to the frontend
             filenames.append(file.filename)
-            file.save(APP_ROOT + '/temp/ ' + file.filename)
 
-        for name in filenames:
-            myzip.write(APP_ROOT + '/temp/ ' + name, name)
+            # Save the file to the server
+            file.save(temp_full_path)
 
-            if os.path.exists(APP_ROOT + '/temp' + name):
-                os.remove(APP_ROOT + '/temp/' + name)
+            # Write the file to the zip object
+            myzip.write(temp_full_path, file.filename)
+
+            # Delete the file from the server
+            os.remove(temp_full_path)
 
     return render_template('success.html', filenames=filenames)
 
 
 @app.route('/orders/<string:ordernum>')
 def orders(ordernum):
-    print(APP_ROOT)
     images_path = "".join([APP_ROOT, '/photos/'])
 
     if os.path.exists(images_path + ordernum + '.zip'):
-
         return send_file(images_path + ordernum + '.zip', 'application/zip')
 
     else:
+        # If the user types a order number that doesn't exist return 404
         abort(404)
