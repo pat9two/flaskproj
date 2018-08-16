@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Upload files</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous">
+
+    </script>
 </head>
 <body>
 
@@ -17,7 +22,25 @@
         </div>
         <br/>
         <br/>
-        <div><a href="{{ url_for('orders', ordernum='23') }}" download="">download image</a></div>
     </form>
+        <div>
+            <input id='order' name="order" type="number"/>
+        </div>
+        <div><input type="button" onclick="download()" value="download"/> </div>
+    </form>
+
+<script>
+$(document).ready(function(){
+
+    download = function(){
+        var url = $('#order').val()
+        console.log(url);
+        window.location = '/orders/'+url
+        return false;
+    }
+});
+
+</script>
+
 </body>
 </html>
