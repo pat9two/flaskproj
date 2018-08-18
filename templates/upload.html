@@ -1,0 +1,48 @@
+{% extends 'template.html' %}
+
+{% block content %}
+<div class="container">
+    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <div>Order Id</div>
+            <div><input name="id" type="number" required/></div>
+            <div>
+                <input name="file" type="file" multiple accept="image/*" required/>
+            </div>
+            <div>
+                <input type="submit" value="Upload"/>
+            </div>
+            <br/>
+            <br/>
+        </div>
+    </form>
+
+
+    <!--download code starts here-->
+    <div class="form-group">
+        <form>
+            <div>
+                <input id='order' name="order" type="number" required/>
+            </div>
+            <div>
+                <input type="button" onclick="download()" value="download"/>
+            </div>
+        </form>
+    </div>
+    <!--TODO: change to ajax?-->
+    <script>
+        $(document).ready(function(){
+
+        download = function(){
+            if($('#order').val()){
+                var url = $('#order').val()
+                window.location = '/orders/'+url
+                return false;
+            }else{
+                alert('Enter your order number');
+            }
+        }
+        });
+    </script>
+</div>
+{% endblock %}

@@ -1,20 +1,35 @@
 import os
-from flask import Flask, render_template, request, url_for, send_from_directory, send_file, abort
+from flask import Flask, render_template, request, send_from_directory, send_file, abort
 import zipfile
 
 app = Flask(__name__)
+app.config['DEBUG'] = True
+
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+username = 'uploader'
+password = 'hellyeahbrother'
 
 
 @app.route('/')
+@app.route('/home')
 def home():
-    return render_template('index.html')
+    return render_template('home.html')
+
+#
+# @app.route('/submit-login', methods=['POST'])
+# def login_user():
+
+
+@app.route('/upload-photos')
+def upload_photos():
+    return render_template('upload.html')
 
 
 @app.route('/upload', methods=['POST'])
 def upload():
 
-    filenames=[]
+    filenames = []
 
     with zipfile.ZipFile(APP_ROOT + '/photos/' + request.form['id'] + '.zip', 'w', zipfile.ZIP_DEFLATED) as myzip:
         for file in request.files.getlist('file'):
@@ -47,3 +62,4 @@ def orders(ordernum):
     else:
         # If the user types a order number that doesn't exist return 404
         abort(404)
+        # TODO: add 404 page
